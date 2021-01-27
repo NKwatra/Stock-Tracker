@@ -2,8 +2,11 @@ import styled from "@emotion/styled";
 import { GRAY } from "../../utils/colors";
 
 export const Container = styled.div`
-  padding: 8px 16px 0 16px;
   cursor: pointer;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const Symbol = styled.div`

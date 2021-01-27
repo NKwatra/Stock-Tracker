@@ -49,6 +49,8 @@ export const StockHeader = styled.div`
   color: ${GRAY};
   margin-bottom: -24px;
   margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const SuggestionsContainer = styled.div`
@@ -72,5 +74,5 @@ export const Add = styled.span<AddProps>`
   padding: 0;
   padding-top: 4px;
   transform: ${(props) => props.rotate};
-  transition: transform 0.2s;
+  transition: transform 0.5s;
 `;
