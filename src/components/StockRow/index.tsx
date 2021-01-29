@@ -57,7 +57,7 @@ const StockRow: React.FC<StocksData> = ({ name, symbol, values }) => {
           </AreaChart>
         </Col>
         <Col span={6} style={{ paddingLeft: 24 }}>
-          <Bold>{values[values.length - 1].price}</Bold>
+          <Bold>{values[values.length - 1].price.toFixed(2)}</Bold>
           <Change increase={increase}>
             {increase ? "+" : ""}
             {(values[values.length - 1].price - values[0].price).toFixed(2)}

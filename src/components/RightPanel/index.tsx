@@ -1,15 +1,18 @@
 import { Input, List } from "antd";
 import * as React from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 import { MdAdd, MdSettings } from "react-icons/md";
-import { ErrorMessage, SuggestionResponse } from "../../../pages/api/search";
+import { SuggestionResponse } from "../../../pages/api/search";
 import { LIGHT_BLUE } from "../../utils/colors";
+import { ErrorMessage } from "../../utils/network";
 import StockRow, { StocksData } from "../StockRow";
 import Suggestion from "../Suggestion";
 import {
   Add,
   Panel,
   SearchContainer,
+  Spin,
   StockHeader,
   StoredStocksContainer,
 } from "./styled";
@@ -29,6 +32,7 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
   const [managementMode, setManagementMode] = React.useState(false);
   const [suggestions, setSuggestions] = React.useState([] as suggestion[]);
   const [addMode, setAddMode] = React.useState(false);
+  const [showLoading, setShowLoading] = React.useState(false);
 
   let inputRef = React.useRef<Input>(null);
 
@@ -41,6 +45,7 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
 
   React.useEffect(() => {
     if (addMode && searchText !== "") {
+      setShowLoading(true);
       const delayDebounce = setTimeout(async () => {
         const response = await fetch(`/api/search?search=${searchText}`);
         const data:
@@ -53,6 +58,7 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
           case "error":
             setSuggestions([]);
         }
+        setShowLoading(false);
       }, 200);
       return () => clearTimeout(delayDebounce);
     } else {
@@ -77,6 +83,13 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
             value={searchText}
             onChange={(evt) => setSearchText(evt.target.value)}
             ref={inputRef}
+            suffix={
+              showLoading ? (
+                <Spin>
+                  <AiOutlineLoading3Quarters style={{ color: LIGHT_BLUE }} />
+                </Spin>
+              ) : null
+            }
           />
           <Add rotate={managementMode ? "rotate(360deg)" : ""}>
             <MdSettings

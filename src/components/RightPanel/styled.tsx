@@ -1,3 +1,4 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { GRAY, INPUT_COLOR, LIGHT_BLUE } from "../../utils/colors";
 
@@ -9,6 +10,20 @@ export const StoredStocksContainer = styled.div`
   color: #ffffff;
 `;
 
+const loaderAnimation = keyframes`
+  0% {
+    transform: rotate(0deg)
+  }
+
+  50% {
+    transform: rotate(180deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+`;
+
 export const Panel = styled.section`
   background: radial-gradient(
     circle farthest-side at 100%,
@@ -17,7 +32,10 @@ export const Panel = styled.section`
   );
   height: 100%;
   padding: 32px 24px;
-  border: solid 2px ${GRAY};
+  border: solid 4px ${GRAY};
+  border-left-width: 1px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   overflow: scroll;
   input[type="text"] {
     background-color: ${INPUT_COLOR};
@@ -75,4 +93,8 @@ export const Add = styled.span<AddProps>`
   padding-top: 4px;
   transform: ${(props) => props.rotate};
   transition: transform 0.5s;
+`;
+
+export const Spin = styled.span`
+  animation: ${loaderAnimation} 1s linear infinite;
 `;
