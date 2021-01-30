@@ -1,14 +1,7 @@
 import { Col, Divider, Row } from "antd";
 import * as React from "react";
-import { Area, AreaChart } from "recharts";
-import {
-  BLACK,
-  GRAY,
-  GREEN,
-  LIGHT_GREEN,
-  MEHROON,
-  RED,
-} from "../../utils/colors";
+import { GRAY } from "../../utils/colors";
+import StockChart from "../StockChart";
 import { Bold, Change, Entry, Name } from "./styled";
 
 export interface StocksData {
@@ -43,29 +36,12 @@ const StockRow: React.FC<Props> = ({
           <Name>{name}</Name>
         </Col>
         <Col span={8}>
-          <AreaChart data={values} width={150} height={60}>
-            <defs>
-              <linearGradient id="gradientDecrease" x1={0} x2={0} y1={0} y2={1}>
-                <stop offset="0%" stopColor={RED} />
-                <stop offset="80%" stopColor={MEHROON} />
-                <stop offset="100%" stopColor={BLACK} />
-              </linearGradient>
-              <linearGradient id="gradientIncrease" x1={0} x2={0} y1={0} y2={1}>
-                <stop offset="0%" stopColor={LIGHT_GREEN} />
-                <stop offset="70%" stopColor={GREEN} />
-                <stop offset="100%" stopColor={BLACK} />
-              </linearGradient>
-            </defs>
-            <Area
-              type="monotone"
-              fill={
-                increase ? "url(#gradientIncrease)" : "url(#gradientDecrease)"
-              }
-              stroke={increase ? LIGHT_GREEN : RED}
-              strokeWidth={3}
-              dataKey="price"
-            />
-          </AreaChart>
+          <StockChart
+            width={150}
+            height={60}
+            values={values}
+            increase={increase}
+          />
         </Col>
         <Col span={6} style={{ paddingLeft: 24 }}>
           <Bold>{values[values.length - 1].price.toFixed(2)}</Bold>

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { BLACK, GRAY, LIGHT_GREEN, RED } from "../../utils/colors";
+import { BLACK, GRAY, LIGHT_GRAY, LIGHT_GREEN, RED } from "../../utils/colors";
 
 type PriceProps = {
   readonly increase: boolean;
@@ -9,12 +9,16 @@ type BoldProps = {
   center?: boolean;
 };
 
+type TabProps = {
+  selected?: boolean;
+};
+
 export const Container = styled.section`
   background: ${BLACK};
   padding: 1.5rem;
   border-radius: 10px;
   border-color: solid 1px ${GRAY};
-  height: 60%;
+  height: 90%;
   color: #ffffff;
 `;
 
@@ -33,4 +37,22 @@ export const Change = styled.div<PriceProps>`
   color: ${(props) => (props.increase ? LIGHT_GREEN : RED)};
   font-weight: 700;
   align-self: center;
+`;
+
+export const TabContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const Tab = styled.div<TabProps>`
+  color: ${(props) => (props.selected ? "#ffffff" : GRAY)};
+  font-weight: 600;
+  cursor: pointer;
+  background: ${(props) => (props.selected ? LIGHT_GRAY : "transparent")};
+  padding: 4px;
+  text-align: center;
+`;
+
+export const ChartContainer = styled((props) => <div {...props} />)`
+  margin-top: 16px;
 `;

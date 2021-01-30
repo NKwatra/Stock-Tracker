@@ -5,6 +5,8 @@ type SpinnerProps = {
   width: string;
   height: string;
   color: string;
+  left: string;
+  top: string;
 };
 
 const anim = keyframes`
@@ -25,8 +27,8 @@ export const Spinner = styled.div<SpinnerProps>`
   height: ${(props) => props.height};
   text-align: center;
   font-size: 10px;
-  margin-left: 45%;
-  margin-top: 20%;
+  margin-left: ${(props) => props.left};
+  margin-top: ${(props) => props.top};
   & > div {
     background-color: ${(props) => props.color};
     height: 100%;

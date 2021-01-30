@@ -16,10 +16,10 @@ export interface FetchedStocksResponse {
 
 
 export default function(req: NextApiRequest, res: NextApiResponse<FetchedStocksResponse | ErrorMessage>): Promise<void> {
-    const {stocks,names} = req.query;
+    const {stocks,names, resolution, from, to} = req.query;
     const symbols = (stocks as string).split(",")
     const stockNames = (names as string).split(",");
-    return new Promise(resolve => { getStocksData(symbols).then(results => {
+    return new Promise(resolve => { getStocksData(symbols, resolution ? resolution as string : undefined, from ? parseInt(from as string) : undefined, to ? parseInt(to as string) : undefined).then(results => {
         const retrived = results.filter(result => result !== null);
         if(retrived.length === 0)
         {

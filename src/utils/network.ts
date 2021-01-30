@@ -21,32 +21,40 @@ const getAuthHeaders = (): Headers => {
 
 export const fetchSuggestions = async (searchText: string): Promise<SearchResponse | ErrorMessage> => {
     let url = `${BASE_URL}/search?q=${searchText}`;
-    const response = await fetch(url, {
-        headers: getAuthHeaders(),
-    });
+    try 
+    {
+        const response = await fetch(url, {
+            headers: getAuthHeaders(),
+        });
 
-    
-    if(response.status === 200)
-    {
-        const data = await response.json();
-        return {
-            code: response.status,
-            data: data,
-            status: "success"
+        if(response.status === 200)
+        {
+            const data = await response.json();
+            return {
+                code: response.status,
+                data: data,
+                status: "success"
+            }
+        }else
+        {
+            return {
+                code: response.status,
+                status: "error"
+            }
         }
-    }else
-    {
+    }catch(err) {
+        console.log("Some error in suggestions fetching", err);
         return {
-            code: response.status,
+            code: 500,
             status: "error"
         }
-    }
+    } 
 }
 
-export const getStocksData = (stocks: string[]) => {
+export const getStocksData = (stocks: string[], resolution: string = "D", from?:number, to?:number) => {
     let promises : Promise<StocksResponse | null >[];
     promises = stocks.map(stock => {
-        return getStockData(stock)
+        return getStockData(stock, resolution, from, to);
     })
 
     return Promise.all(promises).then(results => {
@@ -54,10 +62,10 @@ export const getStocksData = (stocks: string[]) => {
     })
 }
 
-export const getStockData = (stock:string) : Promise<StocksResponse | null >=> {
+export const getStockData = (stock:string, resolution:string, from?:number, to?:number) : Promise<StocksResponse | null >=> {
     const today = moment();
     const oneWeekBefore = moment().subtract(7, "d");
-    return fetch(`${BASE_URL}/stock/candle?symbol=${stock}&resolution=D&from=${oneWeekBefore.unix()}&to=${today.unix()}`, {
+    return fetch(`${BASE_URL}/stock/candle?symbol=${stock}&resolution=${resolution}&from=${from || oneWeekBefore.unix()}&to=${to||today.unix()}`, {
         headers: getAuthHeaders(),
     })
     .then(response => {
@@ -66,12 +74,15 @@ export const getStockData = (stock:string) : Promise<StocksResponse | null >=> {
             return response.json();
         }else
         {
-            console.log(response.statusText);
+            console.log("In stocks fetching, response: ",response.statusText);
             return new Promise((resolve) => {
                 resolve(null);
             })
         }
     }).catch((err: Error) => {
-        console.error(err)
+        console.error("Error in stock fetching", err)
+        return new Promise((resolve) => {
+            resolve(null);
+        })
     })
 }

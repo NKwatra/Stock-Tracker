@@ -54,7 +54,13 @@ const Index: React.FC = () => {
               background: `radial-gradient( circle farthest-corner at top left,#07060b 5%,#24232d 85%)`,
             }}
           >
-            <Loader color={LIGHT_GREEN} width="10%" height="30%" />
+            <Loader
+              color={LIGHT_GREEN}
+              width="10%"
+              height="30%"
+              top="20%"
+              left="45%"
+            />
           </Col>
         ) : (
           <Col
