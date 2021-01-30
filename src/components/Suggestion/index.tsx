@@ -58,7 +58,6 @@ const Suggestion: React.FC<Props> = ({
 
       switch (json.status) {
         case "success":
-          console.log([...json.data]);
           addSuggestion((current) => [...json.data, ...current]);
           hideMessage(true, "Stock added!");
           localStorage.setItem(

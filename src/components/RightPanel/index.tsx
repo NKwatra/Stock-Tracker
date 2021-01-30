@@ -40,7 +40,7 @@ const RigthPanel: React.FC<Props> = ({ stocks, setStocksData }) => {
   let inputRef = React.useRef<Input>(null);
 
   const removeSavedStock = (index: number) => {
-    setVisibleStocks((current) => [
+    setStocksData((current) => [
       ...current.slice(0, index),
       ...current.slice(index + 1),
     ]);
@@ -48,7 +48,6 @@ const RigthPanel: React.FC<Props> = ({ stocks, setStocksData }) => {
 
   React.useEffect(() => {
     if (addMode && searchText !== "") {
-      console.log("I ran", addMode, searchText, visibleStocks, managementMode);
       setShowLoading(true);
       const delayDebounce = setTimeout(async () => {
         const response = await fetch(`/api/search?search=${searchText}`);
