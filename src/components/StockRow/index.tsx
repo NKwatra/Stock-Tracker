@@ -9,7 +9,7 @@ import {
   MEHROON,
   RED,
 } from "../../utils/colors";
-import { Bold, Change, Name } from "./styled";
+import { Bold, Change, Entry, Name } from "./styled";
 
 export interface StocksData {
   name: string;
@@ -17,16 +17,27 @@ export interface StocksData {
   values: { price: number }[];
 }
 
-const StockRow: React.FC<StocksData> = ({ name, symbol, values }) => {
+interface Props extends StocksData {
+  selected: boolean;
+  onClick: () => void;
+}
+
+const StockRow: React.FC<Props> = ({
+  name,
+  symbol,
+  values,
+  onClick,
+  selected,
+}) => {
   const increase = values[values.length - 1].price >= values[0].price;
   return (
-    <>
+    <Entry selected={selected}>
       <Divider
         style={{
           background: GRAY,
         }}
       />
-      <Row style={{ cursor: "pointer" }}>
+      <Row style={{ cursor: "pointer" }} onClick={onClick}>
         <Col span={10}>
           <Bold>{symbol}</Bold>
           <Name>{name}</Name>
@@ -64,7 +75,7 @@ const StockRow: React.FC<StocksData> = ({ name, symbol, values }) => {
           </Change>
         </Col>
       </Row>
-    </>
+    </Entry>
   );
 };
 

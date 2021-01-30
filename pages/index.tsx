@@ -2,6 +2,7 @@ import { Col, Row } from "antd";
 import * as React from "react";
 import LeftPanel from "../src/components/LeftPanel";
 import Loader from "../src/components/Loader";
+import OptionsPanel from "../src/components/OptionsPanel";
 import RigthPanel from "../src/components/RightPanel";
 import { StocksData } from "../src/components/StockRow";
 import { LIGHT_GREEN } from "../src/utils/colors";
@@ -12,6 +13,9 @@ import { FetchedStocksResponse } from "./api/stocks";
 const Index: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [stocksData, setStocksData] = React.useState([] as StocksData[]);
+  const [selectedCompany, setSelectedCompany] = React.useState(
+    {} as StocksData
+  );
 
   React.useEffect(() => {
     const stocks = localStorage.getItem("stocks");
@@ -22,6 +26,9 @@ const Index: React.FC = () => {
           switch (json.status) {
             case "success":
               setStocksData(json.data);
+              setSelectedCompany(
+                json.data.length > 0 ? json.data[0] : ({} as StocksData)
+              );
               break;
             case "error":
               setStocksData([]);
@@ -52,15 +59,23 @@ const Index: React.FC = () => {
         ) : (
           <Col
             span={22}
-            style={{ height: "90%", marginTop: "2.5%" }}
+            style={{ height: "95%", marginTop: "1.25%" }}
             offset={1}
           >
             <Row style={{ height: "100%" }}>
-              <Col span={16}>
-                <LeftPanel />
+              <Col span={4}>
+                <OptionsPanel />
+              </Col>
+              <Col span={12}>
+                <LeftPanel company={selectedCompany} />
               </Col>
               <Col span={8} style={{ height: "100%" }}>
-                <RigthPanel stocks={stocksData} setStocksData={setStocksData} />
+                <RigthPanel
+                  stocks={stocksData}
+                  setStocksData={setStocksData}
+                  selected={selectedCompany}
+                  setSelected={setSelectedCompany}
+                />
               </Col>
             </Row>
           </Col>

@@ -22,6 +22,10 @@ type Props = {
   setStocksData: (
     value: StocksData[] | ((prevValue: StocksData[]) => StocksData[])
   ) => void;
+  selected: StocksData;
+  setSelected: (
+    value: StocksData | ((prevValue: StocksData) => StocksData)
+  ) => void;
 };
 
 type suggestion = {
@@ -29,7 +33,12 @@ type suggestion = {
   symbol: string;
 };
 
-const RigthPanel: React.FC<Props> = ({ stocks, setStocksData }) => {
+const RigthPanel: React.FC<Props> = ({
+  stocks,
+  setStocksData,
+  setSelected,
+  selected,
+}) => {
   const [searchText, setSearchText] = React.useState("");
   const [visibleStocks, setVisibleStocks] = React.useState(stocks);
   const [managementMode, setManagementMode] = React.useState(false);
@@ -129,7 +138,14 @@ const RigthPanel: React.FC<Props> = ({ stocks, setStocksData }) => {
                   index={index}
                 />
               ) : (
-                <StockRow {...item} />
+                <StockRow
+                  {...item}
+                  onClick={() => {
+                    setSelected({ ...item });
+                    setSearchText("");
+                  }}
+                  selected={selected.symbol === item.symbol}
+                />
               )
             }
             rowKey={(item) => item.symbol}
