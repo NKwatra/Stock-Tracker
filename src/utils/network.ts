@@ -56,8 +56,8 @@ export const getStocksData = (stocks: string[]) => {
 
 export const getStockData = (stock:string) : Promise<StocksResponse | null >=> {
     const today = moment();
-    const oneWeekBefore = moment().subtract(7, "w");
-    return fetch(`${BASE_URL}/stock/candle?symbol=${stock}&resolution=W&from=${oneWeekBefore.unix()}&to=${today.unix()}`, {
+    const oneWeekBefore = moment().subtract(7, "d");
+    return fetch(`${BASE_URL}/stock/candle?symbol=${stock}&resolution=D&from=${oneWeekBefore.unix()}&to=${today.unix()}`, {
         headers: getAuthHeaders(),
     })
     .then(response => {
@@ -66,6 +66,7 @@ export const getStockData = (stock:string) : Promise<StocksResponse | null >=> {
             return response.json();
         }else
         {
+            console.log(response.statusText);
             return new Promise((resolve) => {
                 resolve(null);
             })

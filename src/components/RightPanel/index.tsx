@@ -19,6 +19,9 @@ import {
 
 type Props = {
   stocks: StocksData[];
+  setStocksData: (
+    value: StocksData[] | ((prevValue: StocksData[]) => StocksData[])
+  ) => void;
 };
 
 type suggestion = {
@@ -26,7 +29,7 @@ type suggestion = {
   symbol: string;
 };
 
-const RigthPanel: React.FC<Props> = ({ stocks }) => {
+const RigthPanel: React.FC<Props> = ({ stocks, setStocksData }) => {
   const [searchText, setSearchText] = React.useState("");
   const [visibleStocks, setVisibleStocks] = React.useState(stocks);
   const [managementMode, setManagementMode] = React.useState(false);
@@ -45,6 +48,7 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
 
   React.useEffect(() => {
     if (addMode && searchText !== "") {
+      console.log("I ran", addMode, searchText, visibleStocks, managementMode);
       setShowLoading(true);
       const delayDebounce = setTimeout(async () => {
         const response = await fetch(`/api/search?search=${searchText}`);
@@ -65,12 +69,12 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
       setVisibleStocks(
         stocks.filter(
           (stock) =>
-            stock.name.indexOf(searchText) !== -1 ||
-            stock.symbol.indexOf(searchText) !== -1
+            stock?.name?.indexOf(searchText) !== -1 ||
+            stock?.symbol?.indexOf(searchText) !== -1
         )
       );
     }
-  }, [searchText, stocks, addMode, searchText]);
+  }, [searchText, stocks, addMode]);
 
   return (
     <Panel>
@@ -134,7 +138,17 @@ const RigthPanel: React.FC<Props> = ({ stocks }) => {
           />
         ) : (
           <List
-            renderItem={(item) => <Suggestion {...item} />}
+            renderItem={(item) => (
+              <Suggestion
+                {...item}
+                addSuggestion={setStocksData}
+                setAddMode={setAddMode}
+                clearText={setSearchText}
+                setSuggestions={setSuggestions}
+                setManagementMode={setManagementMode}
+                setLoading={setShowLoading}
+              />
+            )}
             dataSource={suggestions}
             rowKey={(item) => item.symbol}
             style={{ marginTop: 32 }}

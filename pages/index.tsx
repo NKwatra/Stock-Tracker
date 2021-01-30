@@ -9,113 +9,6 @@ import { ErrorMessage } from "../src/utils/network";
 import { Container } from "../styled";
 import { FetchedStocksResponse } from "./api/stocks";
 
-const stocksData = [
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBUX",
-    values: [
-      { price: 120.05 },
-      { price: 92.07 },
-      { price: 100.37 },
-      { price: 131.76 },
-      { price: 84.09 },
-      { price: 100.87 },
-      { price: 105.06 },
-    ],
-  },
-  {
-    name: "American Express",
-    symbol: "AMEX",
-    values: [
-      { price: 100.05 },
-      { price: 102.07 },
-      { price: 100.37 },
-      { price: 101.76 },
-      { price: 104.09 },
-      { price: 100.87 },
-      { price: 102.06 },
-    ],
-  },
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBAX",
-    values: [
-      { price: 120.05 },
-      { price: 92.07 },
-      { price: 100.37 },
-      { price: 131.76 },
-      { price: 84.09 },
-      { price: 100.87 },
-      { price: 105.06 },
-    ],
-  },
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBEX",
-    values: [
-      { price: 100.05 },
-      { price: 102.07 },
-      { price: 100.37 },
-      { price: 101.76 },
-      { price: 104.09 },
-      { price: 100.87 },
-      { price: 102.06 },
-    ],
-  },
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBQX",
-    values: [
-      { price: 120.05 },
-      { price: 92.07 },
-      { price: 100.37 },
-      { price: 131.76 },
-      { price: 84.09 },
-      { price: 100.87 },
-      { price: 105.06 },
-    ],
-  },
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBMX",
-    values: [
-      { price: 100.05 },
-      { price: 102.07 },
-      { price: 100.37 },
-      { price: 101.76 },
-      { price: 104.09 },
-      { price: 100.87 },
-      { price: 102.06 },
-    ],
-  },
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBOX",
-    values: [
-      { price: 120.05 },
-      { price: 92.07 },
-      { price: 100.37 },
-      { price: 131.76 },
-      { price: 84.09 },
-      { price: 100.87 },
-      { price: 105.06 },
-    ],
-  },
-  {
-    name: "Starbucks Corporation",
-    symbol: "SBPX",
-    values: [
-      { price: 100.05 },
-      { price: 102.07 },
-      { price: 100.37 },
-      { price: 101.76 },
-      { price: 104.09 },
-      { price: 100.87 },
-      { price: 102.06 },
-    ],
-  },
-];
-
 const Index: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [stocksData, setStocksData] = React.useState([] as StocksData[]);
@@ -123,20 +16,24 @@ const Index: React.FC = () => {
   React.useEffect(() => {
     const stocks = localStorage.getItem("stocks");
     const names = localStorage.getItem("names");
-    fetch(`/api/stocks?stocks=${stocks}&names=${names}`).then((response) => {
-      response.json().then((json: ErrorMessage | FetchedStocksResponse) => {
-        switch (json.status) {
-          case "success":
-            setStocksData(json.data);
-            break;
-          case "error":
-            setStocksData([]);
-            alert("error in fetching data");
-            break;
-        }
-        setLoading(false);
+    if (stocks !== null) {
+      fetch(`/api/stocks?stocks=${stocks}&names=${names}`).then((response) => {
+        response.json().then((json: ErrorMessage | FetchedStocksResponse) => {
+          switch (json.status) {
+            case "success":
+              setStocksData(json.data);
+              break;
+            case "error":
+              setStocksData([]);
+              alert("error in fetching data");
+              break;
+          }
+          setLoading(false);
+        });
       });
-    });
+    } else {
+      setLoading(false);
+    }
   }, []);
   return (
     <Container>
@@ -163,7 +60,7 @@ const Index: React.FC = () => {
                 <LeftPanel />
               </Col>
               <Col span={8} style={{ height: "100%" }}>
-                <RigthPanel stocks={stocksData} />
+                <RigthPanel stocks={stocksData} setStocksData={setStocksData} />
               </Col>
             </Row>
           </Col>
