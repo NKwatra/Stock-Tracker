@@ -5,7 +5,7 @@ const Logo: React.FC = () => {
     <>
       <Header>
         <span>Stock</span>
-        <Subhead>Tracer</Subhead>
+        <Subhead>Tracker</Subhead>
       </Header>
       <Line />
     </>

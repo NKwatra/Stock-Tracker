@@ -121,8 +121,12 @@ const StockGraph: React.FC<Props> = ({ company }) => {
 
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const increase =
-    company.values[company.values.length - 1].price - company.values[0].price;
+  const increase = company?.values
+    ? company?.values[company?.values?.length - 1].price -
+      company?.values[0].price
+    : 0.0;
+
+  if (Object.keys(company).length === 0) return null;
 
   return (
     <Container>

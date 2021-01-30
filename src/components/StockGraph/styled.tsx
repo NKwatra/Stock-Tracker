@@ -14,11 +14,15 @@ type TabProps = {
 };
 
 export const Container = styled.section`
-  background: ${BLACK};
+  background: radial-gradient(
+    circle farthest-corner at top left,
+    #1c1d28 5%,
+    ${BLACK} 95%
+  );
   padding: 1.5rem;
   border-radius: 10px;
-  border-color: solid 1px ${GRAY};
-  height: 90%;
+  border: solid 1px ${GRAY};
+  height: 66%;
   color: #ffffff;
 `;
 
